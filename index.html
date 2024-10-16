@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head title="Descarga Subastas">
+        <title>Descarga Subastas</title>
+    </head>
+    <body style="height: 100dvh; align-content: center; text-align: -webkit-center;">
+        <style>
+            * {
+                font-family: 'Courier New', Courier, monospace;
+            }
+        </style>
+        <div style="background-color: #c9c9c9; padding: 15px; width: 250px; height: 150px;">
+            <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 10px; height: 100%;">
+                <label style="color: rgb(44, 44, 44); font-weight: 600; font-size: 14px;">Descargar Ganadores</label>
+                <button style="font-size: 13px; color: #696666; height: 25px; width: 100px; font-weight: 600; cursor: pointer;" onclick="DescargarArchivo()">Descargar</button>
+            </div>
+        </div>
+        <script>
+            async function DescargarArchivo () {
+                return await fetch('https://subastas-backend.vercel.app/api/subasta/descargarGanadores', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    redirect: 'follow',
+                }).then(response => {
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Resultados.xlsx';  // Nombre del archivo que se descargará
+                    document.body.appendChild(a);
+                    a.click();  // Simular clic para iniciar la descarga
+                    a.remove();  // Remover el enlace una vez que se haya descargado
+                })
+                .catch(error => {
+                        return false
+                });
+            }
+        </script>
+    </body>
+</html>
